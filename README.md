@@ -16,22 +16,22 @@ API made for a hospital, with Services and HTTP methods.
 
 <details>
 <summary><b>Medic</b></summary>
-<img src="" alt="">
+<img src="\api-medical\src\main\java\com\hospital\api_medical\img\img1.png" alt="">
 </details>
 
 <details>
 <summary><b>Patient</b></summary>
-<img src="./images/pg02-backend.png" alt="">
+<img src="\api-medical\src\main\java\com\hospital\api_medical\img\img2.png" alt="">
 </details>
 
 <details>
 <summary><b>Schedule</b></summary>
-<img src="./images/pg02-backend.png" alt="">
+<img src="\api-medical\src\main\java\com\hospital\api_medical\img\img3.png" alt="">
 </details>
 
 <details>
 <summary><b>Medic Disponibility</b></summary>
-<img src="./images/pg02-backend.png" alt="">
+<img src="" alt="">
 </details>
 
 
