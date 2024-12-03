@@ -2,9 +2,42 @@
 Hospital API
 </h1>
 
+## 📚 Project
+API made for a hospital, with Services and HTTP methods.
+
+## 🔍 Operation Flows
+
+1. **Find (GET Method):** Return a List or specific class called.
+2. **Create (POST Method):** Create a info on database.
+3. **Modify (PUT Method):** Modify a info setted in the persistence.
+4. **Delete (DELETE Method):** Picks a info and delete.
+
+## 👨‍💻 Endpoints
+
+<details>
+<summary><b>Medic</b></summary>
+<img src="" alt="">
+</details>
+
+<details>
+<summary><b>Patient</b></summary>
+<img src="./images/pg02-backend.png" alt="">
+</details>
+
+<details>
+<summary><b>Schedule</b></summary>
+<img src="./images/pg02-backend.png" alt="">
+</details>
+
+<details>
+<summary><b>Medic Disponibility</b></summary>
+<img src="./images/pg02-backend.png" alt="">
+</details>
+
+
 ```mermaid
 classDiagram
-    class Pacient {
+    class Patient {
         Long id
         String name
         String email
@@ -33,7 +66,7 @@ classDiagram
         Long id
         LocalDateTime dateHour
         String status
-        Long id_pacient
+        Long id_patient
         Long id_medic
     }
 
@@ -41,3 +74,12 @@ classDiagram
     Medic "1" --> "0..*" Scheduling : "realiza"
     Medic "1" --> "0..*" MedicDisponibility : "tem"
 ```
+
+## 💻 Technology
+
+- Language: Java
+- Framework: Spring Framework
+- Database: PostgreSQL
+- Maven
+- Junit5
+- Mockito
