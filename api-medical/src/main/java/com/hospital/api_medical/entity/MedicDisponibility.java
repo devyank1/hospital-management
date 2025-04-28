@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-public class MedicDisponibility extends MedicDisponibilityDTO {
+public class MedicDisponibility {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,15 +19,15 @@ public class MedicDisponibility extends MedicDisponibilityDTO {
     private LocalDate date;
     @Column(nullable = false)
     @ElementCollection
-    private List<String> avaliableHours;
+    private List<String> availableHours;
 
     public MedicDisponibility(){}
 
-    public MedicDisponibility(Long id, Medic medic, LocalDate date, List<String> avaliableHours) {
+    public MedicDisponibility(Long id, Medic medic, LocalDate date, List<String> availableHours) {
         this.id = id;
         this.medic = medic;
         this.date = date;
-        this.avaliableHours = avaliableHours;
+        this.availableHours = availableHours;
     }
 
     public Long getId() {
@@ -55,10 +55,10 @@ public class MedicDisponibility extends MedicDisponibilityDTO {
     }
 
     public List<String> getAvaliableHours() {
-        return avaliableHours;
+        return availableHours;
     }
 
     public void setAvaliableHours(List<String> avaliableHours) {
-        this.avaliableHours = avaliableHours;
+        this.availableHours = avaliableHours;
     }
 }

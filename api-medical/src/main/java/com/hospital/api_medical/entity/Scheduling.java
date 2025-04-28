@@ -11,8 +11,8 @@ public class Scheduling {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "id_pacient", nullable = false)
-    private Pacient pacient;
+    @JoinColumn(name = "id_patient", nullable = false)
+    private Patient patient;
     @ManyToOne
     @JoinColumn(name = "id_medic", nullable = false)
     private Medic medic;
@@ -21,9 +21,9 @@ public class Scheduling {
 
     public Scheduling(){}
 
-    public Scheduling(Long id, Pacient pacient, Medic medic, LocalDateTime date_hour, String status) {
+    public Scheduling(Long id, Patient patient, Medic medic, LocalDateTime date_hour, String status) {
         this.id = id;
-        this.pacient = pacient;
+        this.patient = patient;
         this.medic = medic;
         this.date_hour = date_hour;
         this.status = status;
@@ -37,12 +37,12 @@ public class Scheduling {
         this.id = id;
     }
 
-    public Pacient getPacient() {
-        return pacient;
+    public Patient getPatient() {
+        return patient;
     }
 
-    public void setPacient(Pacient pacient) {
-        this.pacient = pacient;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     public Medic getMedic() {
