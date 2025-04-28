@@ -7,4 +7,5 @@ public record SchedulingDTO(
         Long medicId,
         String patientName,
         String medicName,
-        LocalDateTime dateHour){}
+        LocalDateTime dateHour,
+        String status){}
