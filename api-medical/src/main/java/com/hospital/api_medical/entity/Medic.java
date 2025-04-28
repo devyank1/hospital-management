@@ -19,6 +19,8 @@ public class Medic {
     @Column(nullable = false)
     private String email;
 
+    public Medic(Long medicId){}
+
     public Medic(Long id, String name, String specialty, String crm, String numberCellphone, String email) {
         this.id = id;
         this.name = name;
@@ -28,7 +30,8 @@ public class Medic {
         this.email = email;
     }
 
-    public Medic() {}
+    public Medic() {
+    }
 
     public Long getId() {
         return id;
