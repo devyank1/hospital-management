@@ -2,6 +2,7 @@ package com.hospital.api_medical.service;
 
 import com.hospital.api_medical.entity.Medic;
 import com.hospital.api_medical.entity.Pacient;
+import com.hospital.api_medical.entity.Patient;
 import com.hospital.api_medical.entity.Scheduling;
 import com.hospital.api_medical.repository.MedicRepository;
 import com.hospital.api_medical.repository.PacientRepository;
@@ -27,13 +28,13 @@ public class SchedulingService {
     //method to create a new schedule
     public Scheduling createScheduling(Long pacientId, Long medicId, LocalDateTime dateTime, String status){
 
-        Pacient pacient = pacientRepository.findById(pacientId).orElseThrow(() -> new RuntimeException("Patient not found!"));
+        Patient pacient = pacientRepository.findById(pacientId).orElseThrow(() -> new RuntimeException("Patient not found!"));
 
 
         Medic medic = medicRepository.findById(medicId).orElseThrow(() -> new RuntimeException("Medic not found!"));
 
         Scheduling scheduling = new Scheduling();
-        scheduling.setPacient(pacient);
+        scheduling.setPatient(pacient);
         scheduling.setMedic(medic);
         scheduling.setDate_hour(dateTime);
         scheduling.setStatus(status);
