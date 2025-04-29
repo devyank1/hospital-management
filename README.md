@@ -30,7 +30,7 @@ API made for a hospital, with Services and HTTP methods.
 </details>
 
 <details>
-<summary><b>Medic Disponibility</b></summary>
+<summary><b>Medic Availability</b></summary>
 <img src="" alt="">
 </details>
 
@@ -55,7 +55,7 @@ classDiagram
         String email
     }
 
-   class MedicDisponibility {
+   class MedicAvailability {
         Long id
         LocalDate data
         List~String~ avaliableHours
@@ -72,7 +72,7 @@ classDiagram
 
     Pacient "1" --> "0..*" Scheduling : "possui"
     Medic "1" --> "0..*" Scheduling : "realiza"
-    Medic "1" --> "0..*" MedicDisponibility : "tem"
+    Medic "1" --> "0..*" MedicAvailability : "tem"
 ```
 
 ## 💻 Technology
