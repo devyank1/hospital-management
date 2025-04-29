@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/medic-disponibility")
+@RequestMapping("/availabilities")
 public class MedicDisponibilityController {
 
     private final MedicDisponibilityService medicDisponibilityService;

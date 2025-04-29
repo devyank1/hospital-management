@@ -23,7 +23,7 @@ public class MedicController {
         return ResponseEntity.ok(medics);
     }
 
-    @GetMapping("{/id}")
+    @GetMapping("/{id}")
     public ResponseEntity<MedicDTO> findMedicById(@PathVariable Long id) {
         MedicDTO medic = medicService.findMedicById(id);
         return ResponseEntity.ok(medic);
@@ -35,13 +35,13 @@ public class MedicController {
         return ResponseEntity.ok(medic);
     }
 
-    @PutMapping("{/id}")
+    @PutMapping("/{id}")
     public ResponseEntity<MedicDTO> updateMedic(@PathVariable Long id, @RequestBody MedicDTO medicDTO) {
         MedicDTO medic = medicService.actualizeMedic(id, medicDTO);
         return ResponseEntity.ok(medic);
     }
 
-    @DeleteMapping("{/id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMedic(@PathVariable Long id) {
         medicService.deleteMedic(id);
         return ResponseEntity.noContent().build();
