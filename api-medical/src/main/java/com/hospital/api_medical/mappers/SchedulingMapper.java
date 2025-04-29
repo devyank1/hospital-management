@@ -14,6 +14,7 @@ public interface SchedulingMapper {
             @Mapping(source = "medic.id", target = "medicId"),
             @Mapping(source = "patient.name", target = "patientName"),
             @Mapping(source = "medic.name", target = "medicName"),
+            @Mapping(source = "medic.specialty", target = "medicSpecialty"),
             @Mapping(source = "date_hour", target = "dateHour"),
             @Mapping(source = "status", target = "status")})
     SchedulingDTO toDTO(Scheduling scheduling);
@@ -25,5 +26,5 @@ public interface SchedulingMapper {
             @Mapping(source = "status", target = "status"),
             @Mapping(target = "id", ignore = true)
     })
-    Scheduling toEntity(SchedulingDTO schedulingDTO);
+    Scheduling toEntity(SchedulingDTO dto);
 }

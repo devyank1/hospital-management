@@ -23,6 +23,8 @@ public class Patient {
 
     public Patient(){}
 
+    public Patient(Long id) {}
+
     public Patient(Long id, String name, String email, String number, Date birthDate, String cpf) {
         this.id = id;
         this.name = name;

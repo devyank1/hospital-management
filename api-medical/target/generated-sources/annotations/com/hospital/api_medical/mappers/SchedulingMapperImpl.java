@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-04-28T21:30:07-0300",
+    date = "2025-04-29T12:03:04-0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -26,31 +26,35 @@ public class SchedulingMapperImpl implements SchedulingMapper {
         Long medicId = null;
         String patientName = null;
         String medicName = null;
+        String medicSpecialty = null;
         LocalDateTime dateHour = null;
         String status = null;
+        Long id = null;
 
         patientId = schedulingPatientId( scheduling );
         medicId = schedulingMedicId( scheduling );
         patientName = schedulingPatientName( scheduling );
         medicName = schedulingMedicName( scheduling );
+        medicSpecialty = schedulingMedicSpecialty( scheduling );
         dateHour = scheduling.getDate_hour();
         status = scheduling.getStatus();
+        id = scheduling.getId();
 
-        SchedulingDTO schedulingDTO = new SchedulingDTO( patientId, medicId, patientName, medicName, dateHour, status );
+        SchedulingDTO schedulingDTO = new SchedulingDTO( id, patientId, patientName, medicId, medicName, medicSpecialty, dateHour, status );
 
         return schedulingDTO;
     }
 
     @Override
-    public Scheduling toEntity(SchedulingDTO schedulingDTO) {
-        if ( schedulingDTO == null ) {
+    public Scheduling toEntity(SchedulingDTO dto) {
+        if ( dto == null ) {
             return null;
         }
 
         Scheduling scheduling = new Scheduling();
 
-        scheduling.setDate_hour( schedulingDTO.dateHour() );
-        scheduling.setStatus( schedulingDTO.status() );
+        scheduling.setDate_hour( dto.dateHour() );
+        scheduling.setStatus( dto.status() );
 
         scheduling.setPatient( new Patient(dto.patientId()) );
         scheduling.setMedic( new Medic(dto.medicId()) );
@@ -116,5 +120,20 @@ public class SchedulingMapperImpl implements SchedulingMapper {
             return null;
         }
         return name;
+    }
+
+    private String schedulingMedicSpecialty(Scheduling scheduling) {
+        if ( scheduling == null ) {
+            return null;
+        }
+        Medic medic = scheduling.getMedic();
+        if ( medic == null ) {
+            return null;
+        }
+        String specialty = medic.getSpecialty();
+        if ( specialty == null ) {
+            return null;
+        }
+        return specialty;
     }
 }

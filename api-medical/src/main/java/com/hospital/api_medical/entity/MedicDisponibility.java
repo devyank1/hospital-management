@@ -54,11 +54,11 @@ public class MedicDisponibility {
         this.date = date;
     }
 
-    public List<String> getAvaliableHours() {
+    public List<String> getAvailableHours() {
         return availableHours;
     }
 
-    public void setAvaliableHours(List<String> avaliableHours) {
-        this.availableHours = avaliableHours;
+    public void setAvailableHours(List<String> availableHours) {
+        this.availableHours = availableHours;
     }
 }

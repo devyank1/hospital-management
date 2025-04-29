@@ -9,5 +9,4 @@ import java.util.List;
 
 @Repository
 public interface MedicDisponibilityRepository extends JpaRepository<MedicDisponibility, Long>{
-    List<MedicDisponibility> findByIdAndData(Long medicId, LocalDate data);
 }

@@ -11,16 +11,18 @@ public interface MedicDisponibilityMapper {
 
     @Mappings({
             @Mapping(source = "medic.id", target = "medicId"),
+            @Mapping(source = "medic.name", target = "medicName"),
+            @Mapping(source = "medic.specialty", target = "medicSpecialty"),
             @Mapping(source = "date", target = "date"),
-            @Mapping(source = "available_hours", target = "availableHours")
+            @Mapping(source = "availableHours", target = "availableHours")
     })
     MedicDisponibilityDTO toDTO(MedicDisponibility medicDisponibility);
 
     @Mappings({
             @Mapping(target = "medic", expression = "java(new Medic(dto.medicId()))"),
             @Mapping(source = "date", target = "date"),
-            @Mapping(source = "availableHours", target = "available_hours"),
+            @Mapping(source = "availableHours", target = "availableHours"),
             @Mapping(target = "id", ignore = true)
     })
-    MedicDisponibility toEntity(MedicDisponibilityDTO medicDisponibilityDTO);
+    MedicDisponibility toEntity(MedicDisponibilityDTO dto);
 }

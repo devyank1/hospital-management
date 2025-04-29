@@ -49,7 +49,7 @@ public class MedicDisponibilityService {
         MedicDisponibility availability = medicDisponibilityRepository.findById(id)
                 .orElseThrow(() -> new MedicDisponibilityNotFoundException("Availability not found with ID: " + id));
 
-        availability.setAvaliableHours(availability.getAvaliableHours());
+        availability.setAvailableHours(availability.getAvailableHours());
         availability.setDate(availabilityDTO.date());
         MedicDisponibility updatedAvailability = medicDisponibilityRepository.save(availability);
 
