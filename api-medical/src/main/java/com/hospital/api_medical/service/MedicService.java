@@ -1,40 +1,66 @@
 package com.hospital.api_medical.service;
 
+import com.hospital.api_medical.dto.MedicDTO;
 import com.hospital.api_medical.entity.Medic;
+import com.hospital.api_medical.exception.MedicNotFoundException;
+import com.hospital.api_medical.mappers.MedicMapper;
 import com.hospital.api_medical.repository.MedicRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class MedicService {
 
     private final MedicRepository medicRepository;
+    private final MedicMapper medicMapper;
 
-    public MedicService(MedicRepository medicRepository) {
+    public MedicService(MedicRepository medicRepository, MedicMapper medicMapper) {
         this.medicRepository = medicRepository;
+        this.medicMapper = medicMapper;
     }
 
-    public List<Medic> listAll(){
-        return medicRepository.findAll();
+    // Find all medics method
+    public Page<MedicDTO> findAllMedics(Pageable pageable) {
+        Page<Medic> medics = medicRepository.findAll(pageable);
+        return medics.map(medicMapper::toDTO);
     }
 
-    public Medic save(Medic medic){
-        return medicRepository.save(medic);
+    // Find medic by ID
+    public MedicDTO findMedicById(Long id) {
+        Medic medic = medicRepository.findById(id)
+                .orElseThrow(() -> new MedicNotFoundException("Medic not found with ID: " + id));
+
+        return medicMapper.toDTO(medic);
     }
 
-    public Medic actualize(Long id, Medic medicActualized){
-        return medicRepository.findById(id).map(medic -> {
-            medic.setName(medicActualized.getName());
-            medic.setSpecialty(medicActualized.getSpecialty());
-            medic.setCrm(medicActualized.getCrm());
-            medic.setNumber(medicActualized.getNumber());
-            medic.setEmail(medicActualized.getEmail());
-            return medicRepository.save(medic);
-        }).orElseThrow(() -> new RuntimeException("Medic not found or actualized!"));
+    // Save a new medic
+    @Transactional
+    public MedicDTO createMedic(MedicDTO medicDTO) {
+        Medic medic = medicMapper.toEntity(medicDTO);
+        Medic updatedMedic = medicRepository.save(medic);
+        return medicMapper.toDTO(updatedMedic);
     }
 
-    public void delete(Long id){
-        medicRepository.deleteById(id);
+    // Update a medic
+    @Transactional
+    public MedicDTO actualizeMedic(Long id, MedicDTO medicDTO) {
+        Medic existingMedic = medicRepository.findById(id)
+                .orElseThrow(() -> new MedicNotFoundException("Medic not found with ID: " + id));
+
+        existingMedic.setName(medicDTO.name());
+        existingMedic.setSpecialty(medicDTO.specialty());
+        Medic updatedMedic = medicRepository.save(existingMedic);
+
+        return medicMapper.toDTO(updatedMedic);
+    }
+
+    @Transactional
+    public void deleteMedic(Long id) {
+        if (!medicRepository.existsById(id)) {
+            throw new MedicNotFoundException("Medic not found with ID: " + id);
+        }
     }
 }

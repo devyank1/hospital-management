@@ -1,78 +1,66 @@
 package com.hospital.api_medical.service;
 
 import com.hospital.api_medical.dto.MedicDisponibilityDTO;
-import com.hospital.api_medical.entity.Medic;
 import com.hospital.api_medical.entity.MedicDisponibility;
+import com.hospital.api_medical.exception.MedicDisponibilityNotFoundException;
+import com.hospital.api_medical.mappers.MedicDisponibilityMapper;
 import com.hospital.api_medical.repository.MedicDisponibilityRepository;
-import com.hospital.api_medical.repository.MedicRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
 
 @Service
 public class MedicDisponibilityService {
 
     private final MedicDisponibilityRepository medicDisponibilityRepository;
+    private final MedicDisponibilityMapper medicDisponibilityMapper;
 
-    private final MedicRepository medicRepository;
-
-    public MedicDisponibilityService(MedicDisponibilityRepository medicDisponibilityRepository, MedicRepository medicRepository) {
+    public MedicDisponibilityService(MedicDisponibilityRepository medicDisponibilityRepository, MedicDisponibilityMapper medicDisponibilityMapper) {
         this.medicDisponibilityRepository = medicDisponibilityRepository;
-        this.medicRepository = medicRepository;
+        this.medicDisponibilityMapper = medicDisponibilityMapper;
     }
 
-
-    // add a new disponibility
-    public MedicDisponibility createDisponibility(Long medicId, LocalDate data, List<String> hoursAvaliable){
-        MedicDisponibility medicDisponibility = new MedicDisponibility();
-        medicDisponibility.setMedic(new Medic(medicId));
-        medicDisponibility.setDate(data);
-        medicDisponibility.setAvaliableHours(hoursAvaliable);
-
-        return medicDisponibilityRepository.save(medicDisponibility);
+    // Fetch all availabilities
+    public Page<MedicDisponibilityDTO> findAllAvailabilities(Pageable pageable) {
+        Page<MedicDisponibility> availabilities = medicDisponibilityRepository.findAll(pageable);
+        return availabilities.map(medicDisponibilityMapper::toDTO);
     }
 
-    // method to find disponibility of a medic in a specific date
-    public List<MedicDisponibility> findDisponibility(Long id, LocalDate data){
-        return medicDisponibilityRepository.findByIdAndData(id, data);
+    // Fetch availability by ID
+    public MedicDisponibilityDTO findAvailabilityById(Long id) {
+        MedicDisponibility disponibility = medicDisponibilityRepository.findById(id)
+                .orElseThrow(() -> new MedicDisponibilityNotFoundException("Availability not found with ID: " + id));
+
+        return medicDisponibilityMapper.toDTO(disponibility);
     }
 
-    //mehtod to actualize a medic disponibility in a specific date
-    public Optional<MedicDisponibility> actualizeDisponibility(Long id, MedicDisponibilityDTO medicDisponibilityDTO){
-        Optional<MedicDisponibility> OptionalDisponibility = medicDisponibilityRepository.findById(id);
+    // create a new availability
+    @Transactional
+    public MedicDisponibilityDTO createAvailability(MedicDisponibilityDTO disponibilityDTO) {
+        MedicDisponibility availability = medicDisponibilityMapper.toEntity(disponibilityDTO);
+        MedicDisponibility updatedAvailability = medicDisponibilityRepository.save(availability);
+        return medicDisponibilityMapper.toDTO(updatedAvailability);
+    }
 
-        if (OptionalDisponibility.isPresent()){
-            MedicDisponibility disponibility = OptionalDisponibility.get();
+    // Update availability
+    @Transactional
+    public MedicDisponibilityDTO updateAvailability(Long id, MedicDisponibilityDTO availabilityDTO) {
+        MedicDisponibility availability = medicDisponibilityRepository.findById(id)
+                .orElseThrow(() -> new MedicDisponibilityNotFoundException("Availability not found with ID: " + id));
 
-            Medic medic = medicRepository.findById(medicDisponibilityDTO.getMedicId()).orElseThrow(() -> new RuntimeException("Medic not found"));
-            disponibility.setMedic(medic);
-            disponibility.setDate(medicDisponibilityDTO.getDate());
-            disponibility.setAvaliableHours(medicDisponibilityDTO.getAvaliableHours());
+        availability.setAvaliableHours(availability.getAvaliableHours());
+        availability.setDate(availabilityDTO.date());
+        MedicDisponibility updatedAvailability = medicDisponibilityRepository.save(availability);
 
-            return Optional.of(medicDisponibilityRepository.save(disponibility));
-        } else {
-            return Optional.empty();
+        return medicDisponibilityMapper.toDTO(updatedAvailability);
+    }
+
+    // Delete availability
+    @Transactional
+    public void deleteAvailability(Long id) {
+        if (!medicDisponibilityRepository.existsById(id)) {
+            throw new MedicDisponibilityNotFoundException("Availability not found with ID: " + id);
         }
     }
-
-    //delete disponibility in a specific date
-    public void deleteDisponibility(Long id){
-        medicDisponibilityRepository.deleteById(id);
-    }
-
-    public MedicDisponibility createDisponibility(MedicDisponibilityDTO medicDisponibilityDTO) {
-        Medic medic = medicRepository.findById(medicDisponibilityDTO.getMedicId()).orElseThrow(() -> new RuntimeException("Medic not found"));
-
-        MedicDisponibility medicDisponibility = new MedicDisponibility();
-        medicDisponibility.setMedic(medic);
-        medicDisponibility.setDate(medicDisponibilityDTO.getDate());
-        medicDisponibility.setAvaliableHours(medicDisponibilityDTO.getAvaliableHours());
-
-        return medicDisponibilityRepository.save(medicDisponibility);
-    }
-
-
 }
