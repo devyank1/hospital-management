@@ -1,40 +1,49 @@
 package com.hospital.api_medical.controller;
 
-import com.hospital.api_medical.entity.Medic;
+import com.hospital.api_medical.dto.MedicDTO;
 import com.hospital.api_medical.service.MedicService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/medic")
+@RequestMapping("/medics")
 public class MedicController {
 
-    public final MedicService medicService;
+    private final MedicService medicService;
 
     public MedicController(MedicService medicService) {
         this.medicService = medicService;
     }
 
     @GetMapping
-    public List<Medic> listAllMedics(){
-        return medicService.listAll();
+    public ResponseEntity<Page<MedicDTO>> allMedics(Pageable pageable) {
+        Page<MedicDTO> medics = medicService.findAllMedics(pageable);
+        return ResponseEntity.ok(medics);
+    }
+
+    @GetMapping("{/id}")
+    public ResponseEntity<MedicDTO> findMedicById(@PathVariable Long id) {
+        MedicDTO medic = medicService.findMedicById(id);
+        return ResponseEntity.ok(medic);
     }
 
     @PostMapping
-    public Medic saveMedic(@RequestBody Medic medic){
-        return medicService.save(medic);
+    public ResponseEntity<MedicDTO> createMedic(@RequestBody MedicDTO medicDTO) {
+        MedicDTO medic = medicService.createMedic(medicDTO);
+        return ResponseEntity.ok(medic);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Medic> actualizeStatsMedic(@PathVariable Long id, @RequestBody Medic medic){
-        return ResponseEntity.ok(medicService.actualize(id, medic));
+    @PutMapping("{/id}")
+    public ResponseEntity<MedicDTO> updateMedic(@PathVariable Long id, @RequestBody MedicDTO medicDTO) {
+        MedicDTO medic = medicService.actualizeMedic(id, medicDTO);
+        return ResponseEntity.ok(medic);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMedic(@PathVariable Long id){
-        medicService.delete(id);
+    @DeleteMapping("{/id}")
+    public ResponseEntity<Void> deleteMedic(@PathVariable Long id) {
+        medicService.deleteMedic(id);
         return ResponseEntity.noContent().build();
     }
 }

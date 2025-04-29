@@ -1,40 +1,50 @@
 package com.hospital.api_medical.controller;
 
-import com.hospital.api_medical.entity.Pacient;
+import com.hospital.api_medical.dto.PatientDTO;
 import com.hospital.api_medical.service.PatientService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
-@RequestMapping("/pacient")
-public class PacientController {
+@RequestMapping("/patients")
+public class PatientController {
 
-    private final PatientService pacientService;
+    private final PatientService patientService;
 
-    public PacientController(PatientService pacientService) {
-        this.pacientService = pacientService;
+    public PatientController(PatientService patientService) {
+        this.patientService = patientService;
     }
 
-    @GetMapping // mehtod to list all patients presents in list.
-    public List<Pacient> listAllPacients(){
-        return pacientService.findAll();
+    @GetMapping
+    public ResponseEntity<Page<PatientDTO>> allPatients(Pageable pageable) {
+        Page<PatientDTO> patients = patientService.allPatients(pageable);
+        return ResponseEntity.ok(patients);
     }
 
-    @PostMapping // method to save patient.
-    public Pacient savePacient(@RequestBody Pacient pacient){
-        return pacientService.save(pacient);
+    @GetMapping("/{id}")
+    public ResponseEntity<PatientDTO> findPatientById(@PathVariable Long id) {
+        PatientDTO patient = patientService.findPatientById(id);
+        return ResponseEntity.ok(patient);
     }
 
-    @PutMapping("/{id}") // method to actualize a patient by their ID.
-    public ResponseEntity<Pacient> actualizePacientStats(@PathVariable Long id, @RequestBody Pacient pacient){
-        return ResponseEntity.ok(pacientService.actualize(id, pacient));
+    @PostMapping
+    public ResponseEntity<PatientDTO> createPatient(@RequestBody PatientDTO newPatientDTO) {
+        PatientDTO patient = patientService.createPatient(newPatientDTO);
+        return ResponseEntity.ok(patient);
     }
 
-    @DeleteMapping("/{id}") // method to delete a patient by their ID.
-    public ResponseEntity<Void> deletePacient(@PathVariable Long id){
-        pacientService.delete(id);
+    @PutMapping("/{id}")
+    public ResponseEntity<PatientDTO> updatePatient(@PathVariable Long id, @RequestBody PatientDTO patientDTO) {
+        PatientDTO patient = patientService.updatePatient(id, patientDTO);
+        return ResponseEntity.ok(patient);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePatient(@PathVariable Long id) {
+        patientService.deletePatient(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -1,16 +1,14 @@
 package com.hospital.api_medical.controller;
 
-import com.hospital.api_medical.dto.ScheduleDTO;
-import com.hospital.api_medical.entity.Scheduling;
+import com.hospital.api_medical.dto.SchedulingDTO;
 import com.hospital.api_medical.service.SchedulingService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @RestController
-@RequestMapping("/schedule")
+@RequestMapping("/schedules")
 public class SchedulingController {
 
     private final SchedulingService schedulingService;
@@ -19,36 +17,32 @@ public class SchedulingController {
         this.schedulingService = schedulingService;
     }
 
-    @GetMapping("/{id}") // method to find a schedule for ID.
-    public ResponseEntity<Scheduling> findScheduleForId(@PathVariable Long id){
-        Scheduling scheduling = schedulingService.findSchedulingForId(id);
-        return ResponseEntity.ok(scheduling);
+    @GetMapping
+    public ResponseEntity<Page<SchedulingDTO>> allSchedules(Pageable pageable) {
+        Page<SchedulingDTO> schedules = schedulingService.getAllSchedules(pageable);
+        return ResponseEntity.ok(schedules);
     }
 
-    @PostMapping // method to create a schedule.
-    public ResponseEntity<Scheduling> createSchedule(@RequestBody ScheduleDTO scheduleDTO){
-        Long pacientId = scheduleDTO.getPacientId();
-        Long medicId = scheduleDTO.getMedicId();
-        LocalDateTime dateHour = scheduleDTO.getDateHour();
-
-        Scheduling newScheduling = schedulingService.createScheduling(pacientId, medicId, dateHour, "Pendent");
-        return ResponseEntity.ok().build();
+    @GetMapping("/{id}")
+    public ResponseEntity<SchedulingDTO> findScheduleById(@PathVariable Long id) {
+        SchedulingDTO schedule = schedulingService.findScheduleById(id);
+        return ResponseEntity.ok(schedule);
     }
 
-    @GetMapping // method to list aal schedules.
-    public ResponseEntity<List<Scheduling>> listAllSchedules(){
-        List<Scheduling> schedulings = schedulingService.listAllSchedules();
-        return ResponseEntity.ok(schedulings);
+    @PostMapping
+    public ResponseEntity<SchedulingDTO> createSchedule(@RequestBody SchedulingDTO schedulingDTO) {
+        SchedulingDTO schedule = schedulingService.createSchedule(schedulingDTO);
+        return ResponseEntity.ok(schedule);
     }
 
-    @PutMapping("/{id}") // method to actualize schedules for ID.
-    public ResponseEntity<Scheduling> actualizeSchedules(@PathVariable Long id, @RequestBody ScheduleDTO scheduleDTO){
-        Scheduling newScheduling = schedulingService.actualizeScheduling(id, scheduleDTO.getDateHour(), "Confirmed!");
-        return ResponseEntity.ok(newScheduling);
+    @PutMapping("/{id}")
+    public ResponseEntity<SchedulingDTO> updateSchedule(@PathVariable Long id, @RequestBody SchedulingDTO schedulingDTO) {
+        SchedulingDTO schedule = schedulingService.actualizeScheduling(id, schedulingDTO);
+        return ResponseEntity.ok(schedule);
     }
 
-    @DeleteMapping("/{id}") // method to delete a schedule for ID.
-    public ResponseEntity<Void> deleteSchedules(@PathVariable Long id){
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id) {
         schedulingService.deleteSchedule(id);
         return ResponseEntity.noContent().build();
     }
