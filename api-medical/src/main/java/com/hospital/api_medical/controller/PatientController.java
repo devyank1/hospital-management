@@ -30,7 +30,7 @@ public class PatientController {
         return ResponseEntity.ok(patient);
     }
 
-    @PostMapping
+    @PostMapping("/signup")
     public ResponseEntity<PatientDTO> createPatient(@RequestBody PatientDTO newPatientDTO) {
         PatientDTO patient = patientService.createPatient(newPatientDTO);
         return ResponseEntity.ok(patient);
