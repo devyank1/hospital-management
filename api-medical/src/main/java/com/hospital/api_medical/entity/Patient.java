@@ -20,18 +20,21 @@ public class Patient {
     private Date birthDate;
     @Column(nullable = false)
     private String cpf;
+    @Column(nullable = false)
+    private String password;
 
     public Patient(){}
 
     public Patient(Long id) {}
 
-    public Patient(Long id, String name, String email, String number, Date birthDate, String cpf) {
+    public Patient(Long id, String name, String email, String number, Date birthDate, String cpf, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.number = number;
         this.birthDate = birthDate;
         this.cpf = cpf;
+        this.password = password;
     }
 
     public Long getId() {
@@ -80,5 +83,13 @@ public class Patient {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
