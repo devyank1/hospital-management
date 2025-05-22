@@ -1,10 +1,12 @@
 package com.hospital.api_medical.controller;
 
+import com.hospital.api_medical.dto.PatientCreateDTO;
 import com.hospital.api_medical.dto.PatientDTO;
 import com.hospital.api_medical.service.PatientService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -14,7 +16,7 @@ public class PatientController {
 
     private final PatientService patientService;
 
-    public PatientController(PatientService patientService) {
+    public PatientController(PatientService patientService, PasswordEncoder encoder) {
         this.patientService = patientService;
     }
 
@@ -31,9 +33,9 @@ public class PatientController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<PatientDTO> createPatient(@RequestBody PatientDTO newPatientDTO) {
-        PatientDTO patient = patientService.createPatient(newPatientDTO);
-        return ResponseEntity.ok(patient);
+    public ResponseEntity<PatientDTO> createPatient(@RequestBody PatientCreateDTO newPatientDTO) {
+        PatientDTO patientRegistered = patientService.registerPatient(newPatientDTO);
+        return ResponseEntity.ok(patientRegistered);
     }
 
     @PutMapping("/{id}")
