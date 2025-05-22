@@ -9,5 +9,6 @@ public interface MedicMapper {
 
     MedicDTO toDTO(Medic medic);
 
+
     Medic toEntity(MedicDTO medicDTO);
 }
