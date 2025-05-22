@@ -9,18 +9,21 @@ import com.hospital.api_medical.repository.PatientRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
 @Service
 public class PatientService {
 
-    public final PatientRepository patientRepository;
-    public final PatientMapper patientMapper;
+    private final PatientRepository patientRepository;
+    private final PatientMapper patientMapper;
+    private final PasswordEncoder encoder;
 
-    public PatientService(PatientRepository patientRepository, PatientMapper patientMapper) {
+    public PatientService(PatientRepository patientRepository, PatientMapper patientMapper, PasswordEncoder encoder) {
         this.patientRepository = patientRepository;
         this.patientMapper = patientMapper;
+        this.encoder = encoder;
     }
 
     // Fetch all patients
@@ -38,8 +41,8 @@ public class PatientService {
 
     // Create a new patient
     @Transactional
-    public PatientDTO createPatient(PatientDTO patientDTO) {
-        Patient patient = patientMapper.toEntity(patientDTO);
+    public PatientDTO registerPatient(PatientCreateDTO patientDTO) {
+        Patient patient = patientMapper.toEntity(patientDTO, encoder);
         Patient updatedPatient = patientRepository.save(patient);
         return patientMapper.toDto(updatedPatient);
     }
